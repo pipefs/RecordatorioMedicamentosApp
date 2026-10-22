@@ -1,0 +1,24 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "usuarios": {
+      "$uid": {
+        "registros": {
+          ".read": "auth != null && auth.uid === $uid && auth.token.firebase.sign_in_provider === 'password'",
+          "$id": {
+            ".write": "auth != null && auth.uid === $uid && auth.token.firebase.sign_in_provider === 'password' && newData.exists() && (!data.exists() || (newData.child('id').val() === data.child('id').val() && newData.child('medicamento').val() === data.child('medicamento').val() && newData.child('dosis').val() === data.child('dosis').val() && newData.child('horaIngresada').val() === data.child('horaIngresada').val() && newData.child('resultado').val() === data.child('resultado').val() && newData.child('fechaRegistro').val() === data.child('fechaRegistro').val()))",
+            ".validate": "newData.hasChildren(['id', 'medicamento', 'dosis', 'horaIngresada', 'resultado', 'fechaRegistro'])",
+            "id": { ".validate": "newData.isString() && newData.val() === $id" },
+            "medicamento": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 120" },
+            "dosis": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 120" },
+            "horaIngresada": { ".validate": "newData.isString() && newData.val().matches(/^([01][0-9]|2[0-3]):[0-5][0-9]$/)" },
+            "resultado": { ".validate": "newData.val() === 'TOMADA' || newData.val() === 'NO TOMADA'" },
+            "fechaRegistro": { ".validate": "newData.isNumber() && newData.val() > 0" },
+            "$other": { ".validate": false }
+          }
+        }
+      }
+    }
+  }
+}
